@@ -1,64 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, FlatList, StyleSheet } from 'react-native';
-import productData from './product_data.json'
-
-import { ProductCard } from './components';
 import { TextInput } from 'react-native-gesture-handler';
+import {ProductCard} from './components'
+
+import productData from './product_data.json';
+
 
 
 const App = () => {
+
     const [searchValue, setSearchValue] = useState("");
     const [displayList, setDisplayList] = useState([]);
 
-    const renderListItem = ({ item }) => <ProductCard product={item} />
+    useEffect(() => {setDisplayList(productData)}, [] )
 
     useEffect(() => {
-        setDisplayList(productData)
-    }, [])
+        const filterValue = productData.filter( item => {
+            const productTitle = item.title.toUpperCase();
+            const searchText = searchValue.toUpperCase();
 
-    useEffect(()=> {
-        const filteredValue = productData.filter( item => {
-
-            const text = searchValue.toUpperCase();
-            const productTitle= item.title.toUpperCase();
-    
-            return productTitle.indexOf(text) > -1;
-        }) 
-        setDisplayList(filteredValue)
+            return productTitle.indexOf(searchText) > -1;
+        })
+        setDisplayList(filterValue);
     }, [searchValue])
 
-
-
-    return (
+    const renderList = ({item}) => <ProductCard item={item} />
+    return(
         <SafeAreaView>
+            <Text style={styles.title}>ViyaShop</Text>
+            <TextInput
+                placeholder= 'Lütfen aramak istediğiniz ürünü giriniz'
+                onChangeText= {(value) => setSearchValue(value)}
+                style={styles.textinput}
+            />
             <View>
-                <Text style={styles.banner}>ViyaShop</Text>
-
-                <View style={styles.searchBar}>
-                    <TextInput
-                        placeholder="Ürün ara..."
-                        onChangeText={(value) => setSearchValue(value)}
-                    />
-                </View>
-
                 <FlatList
-                    keyExtractor={(item, index) => index.toString()}
+                    keyExtractor = {(item,title) => title.toString()}
                     data={displayList}
-                    renderItem={renderListItem}
+                    renderItem={renderList}
                     numColumns={2}
                 />
-
             </View>
         </SafeAreaView>
     )
 }
 
+
 export default App;
 
 const styles = StyleSheet.create({
-    banner: {
-        fontSize: 20,
+    title: {
+        color: 'purple',
         fontWeight: 'bold',
+        fontSize: 25,
         textAlign: 'center',
+    },
+    textinput: {
+        borderWidth: 1,
+        borderRadius: 5,
+        margin: 10,
+        padding: 5
     }
 })
