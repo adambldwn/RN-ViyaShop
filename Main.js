@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, FlatList, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import {ProductCard} from './components'
+import {ProductCard, SearchBar} from './components'
 
 import productData from './product_data.json';
 
@@ -28,10 +28,9 @@ const App = () => {
     return(
         <SafeAreaView>
             <Text style={styles.title}>ViyaShop</Text>
-            <TextInput
-                placeholder= 'Lütfen aramak istediğiniz ürünü giriniz'
-                onChangeText= {(value) => setSearchValue(value)}
-                style={styles.textinput}
+            <SearchBar
+                place = 'Lütfen aramak istediğiniz ürünü giriniz'
+                onSearch = {(value) => setSearchValue(value)}
             />
             <View>
                 <FlatList
@@ -54,11 +53,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 25,
         textAlign: 'center',
-    },
-    textinput: {
-        borderWidth: 1,
-        borderRadius: 5,
-        margin: 10,
-        padding: 5
     }
 })
